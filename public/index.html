@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <meta charset="utf-8">
+  <title>my Plex Client</title>
+  <link rel="stylesheet" href="/css/bootstrap-material-design.min.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="/css/ripples.min.css" media="screen" title="no title" charset="utf-8">
+</head>
+
+<body>
+  <div class="container" ng-controller="mainCtrl">
+    <div class="panel panel-danger" ng-hide="serverOK">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <center>No he podido conectar con el servidor Plex</center>
+        </h3>
+      </div>
+    </div>
+    <div class="jumbotron" ng-show="status.data[0]">
+      <h1>Reproduciendo ahora mismo: </h1>
+      <p>{{status.data[0].grandparentTitle}} - {{status.data[0].title}}</p>
+      <p>{{status.data[0].summary}}</p>
+    </div>
+    <div>
+      <button class="btn btn-primary btn-raised" type="button" name="btnStatus" ng-click="statusDo()">Ver estado</button>
+      <p ng-model="status"></p>
+    </div>
+    <form class="form-inline" action="index.html" method="post">
+      <div class="form-group label-floating">
+        <label class="control-label" for="search">Filtro:</label>
+        <input class="form-control" type="text" id="search" ng-model="criteria">
+      </div>
+    </form>
+    <div class="container" ng-show="results">
+      <div class="list-group">
+        <div class="list-group-item" ng-repeat="row in results | filter:criteria">
+          <div class="row-action-primary">
+            <i ng-if="row._elementType=='Directory'" class="material-icons">folder</i>
+            <i ng-if="row._elementType=='Video'" class="material-icons">folder</i>
+          </div>
+          <div class="row-content">
+            <h4 class="list-group-item-heading"><a href="#" ng-click="listDo(row.uri + '/all')">{{row.title}}</a></h4>
+            <p ng-if="row._elementType=='Video'" class="list-group-item-text">{{row.title}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" ng-hide="isRoot">
+      <a href="#" ng-click="listDo('{{uriParent}}')">Volver {{uriParent}}</a>
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script src="/js/ripples.min.js"></script>
+    <script type="text/javascript">
+      $.material.init();
+    </script>
+    <script src="/js/index.js">
+    </script>
+</body>
+
+</html>
